@@ -1,0 +1,9 @@
+{
+  "name": "malkings-smartapp",
+  "version": "1.0.0",
+  "main": "api/testSupabase.js",
+  "type": "module",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.43.0"
+  }
+}
