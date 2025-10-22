@@ -1,23 +1,23 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
+// Get your Supabase credentials from environment variables
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default async function handler(req, res) {
   try {
-    const { data, error } = await supabase.from('test_table').select('*')
+    // Test the connection by selecting from an existing or empty table
+    const { data, error } = await supabase.from('test').select('*')
 
     if (error) {
-      console.error('❌ Connection failed:', error.message)
-      return res.status(500).json({ success: false, error: error.message })
+      console.error('Supabase error:', error.message)
+      return res.status(500).json({ error: error.message })
     }
 
-    console.log('✅ Connected successfully!')
-    return res.status(200).json({ success: true, data })
+    res.status(200).json({ success: true, data })
   } catch (err) {
-    console.error('❌ Unexpected error:', err)
-    return res.status(500).json({ success: false, error: err.message })
+    console.error('Server error:', err.message)
+    res.status(500).json({ error: 'Internal Server Error' })
   }
 }
