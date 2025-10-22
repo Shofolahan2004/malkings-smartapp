@@ -5,15 +5,14 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 
 export default async function handler(req, res) {
-  const { data, error } = await supabase
-    .from('Test') // your table name
-    .select('*')
-    .order('id', { ascending: true })
+  const { data, error } = await supabase.from('"Test"').select('*')
+
+  console.log('Supabase data:', data)
+  console.log('Supabase error:', error)
 
   if (error) {
-    console.error('Supabase Error:', error.message)
-    return res.status(500).json({ success: false, error: error.message })
+    res.status(500).json({ success: false, error: error.message })
+  } else {
+    res.status(200).json({ success: true, data })
   }
-
-  return res.status(200).json({ success: true, data })
 }
